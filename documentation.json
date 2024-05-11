@@ -1,0 +1,2006 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "POS (Point Of Sale) RESTfull API",
+    "version": "1.0.0",
+    "description": "OpenAPI for Point Of Sale RESTfull API",
+    "contact": {
+      "name": "Muh. Rezky Syaputra",
+      "email": "muhrezkysyaputra@gmail.com"
+    }
+  },
+  "servers": [{ "url": "https://posyou.com/api/v1" }],
+
+  "paths": {
+    "/refresh-token": {
+      "post": {
+        "tags": ["Refresh Token"],
+        "summary": "admin and cashiers can get new access-token",
+        "responses": {
+          "200": {},
+          "401": {}
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "admin and cashiers can create a new account",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RegisterUser"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForRegisterOrUpdateUser"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForRegisterOrUpdateUser"
+          }
+        }
+      }
+    },
+
+    "/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "admin and cashiers can login after register",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/LoginUser"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/LoginSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/LoginError"
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "admin and cashier can view their own account data",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForRegisterOrUpdateUser"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+
+      "patch": {
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "admins and cashiers can change their own account data",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateUser"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForRegisterOrUpdateUser"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForRegisterOrUpdateUser"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+
+    "/logout": {
+      "delete": {
+        "tags": ["User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "admins and cashiers can log out of their accounts",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DeleteUserSuccess"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+
+    "/products": {
+      "post": {
+        "tags": ["Product"],
+        "summary": "admin can create a new product",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateProduct"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdProduct"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdateProduct"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Product"],
+        "summary": "admin and cashiers can get all or search products",
+        "parameters": [
+          {
+            "$ref": "#components/parameters/sku"
+          },
+          {
+            "$ref": "#components/parameters/name"
+          },
+          {
+            "$ref": "#components/parameters/category"
+          },
+          {
+            "$ref": "#components/parameters/page"
+          },
+          {
+            "$ref": "#components/parameters/size"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForGetAllOrSearchProducts"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteProducts"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+
+    "/products/{productId}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "admin and cashier can view product details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/productId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdProduct"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteProducts"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Product"],
+        "summary": "admin can update products",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/productId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateProduct"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdProduct"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdateProduct"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteProducts"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Product"],
+        "summary": "admin can delete products",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/productId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessDeleteProduct"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteProducts"
+          }
+        }
+      }
+    },
+
+    "/categories": {
+      "post": {
+        "tags": ["Category"],
+        "summary": "admin can create a new category",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateCategory"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdCategory"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdateCategory"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Category"],
+        "summary": "admin and cashiers can get all or search categories",
+        "parameters": [
+          {
+            "$ref": "#components/parameters/name"
+          },
+          {
+            "$ref": "#components/parameters/page"
+          },
+          {
+            "$ref": "#components/parameters/size"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForGetAllOrSearchCategory"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteCategory"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+
+    "/categories/{categoryId}": {
+      "get": {
+        "tags": ["Category"],
+        "summary": "admin and cashier can view category details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/categoryId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdCategory"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteCategory"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Category"],
+        "summary": "admin can update categories",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/categoryId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateCategory"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdCategory"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdateCategory"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteCategory"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Category"],
+        "summary": "admin can delete category",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/categoryId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessDeleteCategory"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteCategory"
+          }
+        }
+      }
+    },
+
+    "/payments": {
+      "post": {
+        "tags": ["Payment"],
+        "summary": "admin can create a new payment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreatePayment"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdPayment"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdatePayment"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Payment"],
+        "summary": "admin and cashiers can get all or search payments",
+        "parameters": [
+          {
+            "$ref": "#components/parameters/name"
+          },
+          {
+            "$ref": "#components/parameters/page"
+          },
+          {
+            "$ref": "#components/parameters/size"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForGetAllOrSearchPayment"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeletePayment"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+
+    "/payments/{paymentId}": {
+      "get": {
+        "tags": ["Payment"],
+        "summary": "admin and cashier can view payment details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/paymentId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdPayment"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeletePayment"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Payment"],
+        "summary": "admin can update payment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/paymentId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdatePayment"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdPayment"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdatePayment"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeletePayment"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Payment"],
+        "summary": "admin can delete payment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/paymentId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessDeletePayment"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeletePayment"
+          }
+        }
+      }
+    },
+
+    "/orders": {
+      "post": {
+        "tags": ["Order"],
+        "summary": "cashiers can create a new Order",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateOrder"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdOrder"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdateOrder"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Order"],
+        "summary": "admin and cashiers can get all or search Orders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/nameOrder"
+          },
+          {
+            "$ref": "#components/parameters/page"
+          },
+          {
+            "$ref": "#components/parameters/size"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForGetAllOrSearchOrder"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteOrder"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+
+    "/orders/{orderId}": {
+      "get": {
+        "tags": ["Order"],
+        "summary": "admin and cashier can view Order details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/orderId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdOrder"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteOrder"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Order"],
+        "summary": "cashiers can update Order",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/orderId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateOrder"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessForCreateOrUpdateOrGetByIdOrder"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorForCreateOrUpdateOrder"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteOrder"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Order"],
+        "summary": "cashiers can delete Order",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/orderId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessDeleteOrder"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorForGetAllOrSearchOrGetByIdOrDeleteOrder"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "parameters": {
+      "productId": {
+        "name": "productId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number",
+          "minimum": 1
+        }
+      },
+      "sku": {
+        "name": "sku",
+        "in": "query",
+        "description": "search for products by sku",
+        "schema": {
+          "type": "number"
+        }
+      },
+      "name": {
+        "name": "name",
+        "in": "query",
+        "description": "search for products by name",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "category": {
+        "name": "category",
+        "in": "query",
+        "description": "search for products by category",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "categoryId": {
+        "name": "categoryId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number",
+          "minimum": 1
+        }
+      },
+      "paymentId": {
+        "name": "paymentId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number",
+          "minimum": 1
+        }
+      },
+      "orderId": {
+        "name": "orderId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number",
+          "minimum": 1
+        }
+      },
+      "nameOrder": {
+        "name": "name",
+        "in": "query",
+        "description": "search for Order by name",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "description": "number of products to page ",
+        "schema": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "size": {
+        "name": "size",
+        "in": "query",
+        "description": "number of products to size",
+        "schema": {
+          "type": "number",
+          "default": 10
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "requestBodies": {
+      "RegisterUser": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "example": {
+                "username": "rezky123",
+                "fullName": "rezky syaputra",
+                "email": "rezky@gmail.com",
+                "role": "ADMIN",
+                "password": "rahasia"
+              },
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "uniqueItems": true,
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "fullName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "uniqueItems": true
+                },
+                "role": {
+                  "type": "string",
+                  "enum": ["ADMIN", "CASHIER"]
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
+              },
+              "required": ["username", "fullName", "role", "password", "email"]
+            }
+          }
+        }
+      },
+      "LoginUser": {
+        "description": "Request Login",
+        "content": {
+          "application/json": {
+            "schema": {
+              "example": {
+                "username": "rezky123",
+                "password": "rahasia"
+              },
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
+              },
+              "required": ["username", "password"]
+            }
+          }
+        }
+      },
+      "UpdateUser": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "example": {
+                "fullName": "rezky syaputra",
+                "email": "rezkyupdate@gmail.com",
+                "role": "admin",
+                "password": "rahasia"
+              },
+              "type": "object",
+              "properties": {
+                "fullName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "role": {
+                  "type": "string",
+                  "enum": ["admin", "cashier"]
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "CreateProduct": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "sku": {
+                  "type": "integer",
+                  "format": "int32",
+                  "uniqueItems": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "image": {
+                  "type": "string"
+                }
+              },
+              "required": ["sku", "name", "stock", "price"],
+              "example": {
+                "sku": 12345,
+                "name": "nike jordan",
+                "stock": 19,
+                "price": 1005000,
+                "image": "img/eiuhwncbnad-fescs-sdcefsdc"
+              }
+            }
+          }
+        }
+      },
+      "UpdateProduct": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "sku": {
+                  "type": "integer",
+                  "format": "int32",
+                  "uniqueItems": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "image": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "sku": 12345,
+                "name": "nike jordan",
+                "stock": 19,
+                "price": 1005000,
+                "image": "img/eiuhwncbnad-fescs-sdcefsdc"
+              }
+            }
+          }
+        }
+      },
+
+      "CreateCategory": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": ["name"],
+              "example": {
+                "name": "Shoes"
+              }
+            }
+          }
+        }
+      },
+      "UpdateCategory": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "name": "Headphone"
+              }
+            }
+          }
+        }
+      },
+
+      "CreatePayment": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "type"],
+              "example": {
+                "name": "GoPay",
+                "type": "GoPay/GoPay Later"
+              }
+            }
+          }
+        }
+      },
+      "UpdatePayment": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "type"],
+              "example": {
+                "name": "DANA",
+                "type": "QRIS"
+              }
+            }
+          }
+        }
+      },
+
+      "CreateOrder": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "payment_id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "total_price": {
+                  "type": "number"
+                },
+                "total_paid": {
+                  "type": "number"
+                },
+                "total_return": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "payment_id",
+                "total_paid",
+                "total_price",
+                "total_return",
+                "receipt_id"
+              ],
+              "example": {
+                "payment_id": 1,
+                "name": "Budi",
+                "total_price": 150000,
+                "total_paid": 150000,
+                "total_return": 150000
+              }
+            }
+          }
+        }
+      },
+      "UpdateOrder": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "payment_id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "total_price": {
+                  "type": "number"
+                },
+                "total_paid": {
+                  "type": "number"
+                },
+                "total_return": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "payment_id",
+                "total_paid",
+                "total_price",
+                "total_return",
+                "receipt_id"
+              ],
+              "example": {
+                "payment_id": 2,
+                "name": "Asep",
+                "total_price": 250000,
+                "total_paid": 250000,
+                "total_return": 250000
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid",
+        "content": {
+          "application/json": {
+            "example": {
+              "errors": "unauthorized"
+            },
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ForbiddenError": {
+        "description": "Access not allowed for this role.",
+        "content": {
+          "application/json": {
+            "example": {
+              "errors": "Access not allowed"
+            },
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "LoginSuccess": {
+        "description": "Response login success",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success",
+              "data": {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+              }
+            },
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "LoginError": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "example": {
+                "errors": "username or password is wrong"
+              },
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuccessForRegisterOrUpdateUser": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success",
+              "data": {
+                "username": "rezky123",
+                "fullName": "rezky Syaputra",
+                "email": "rezky@gmail.com",
+                "role": "ADMIN"
+              }
+            },
+            "schema": {
+              "example": {
+                "message": "success",
+                "data": {
+                  "username": "rezky123",
+                  "fullName": "rezky syaputra",
+                  "role": "admin"
+                }
+              },
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "fullName": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForRegisterOrUpdateUser": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "example": {
+              "errors": "fullName must be a string"
+            },
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteUserSuccess": {
+        "description": "success delete token user",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success"
+            },
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuccessForCreateOrUpdateOrGetByIdProduct": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "sku": {
+                  "type": "integer",
+                  "format": "int32",
+                  "uniqueItems": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "image": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": {
+                  "id": 1,
+                  "sku": 12345,
+                  "name": "nike jordan",
+                  "stock": 19,
+                  "price": 1005000,
+                  "image": "img/eiuhwncbnad-fescs-sdcefsdc",
+                  "created_at": "2021-12-20",
+                  "updated_at": "2022-01-20"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForCreateOrUpdateProduct": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "stock must be a number"
+              }
+            }
+          }
+        }
+      },
+      "SuccessForGetAllOrSearchProducts": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "sku": {
+                  "type": "integer",
+                  "format": "int32",
+                  "uniqueItems": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "image": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": [
+                  {
+                    "id": 1,
+                    "sku": 12345,
+                    "name": "nike jordan",
+                    "stock": 19,
+                    "price": 1005000,
+                    "image": "img/eiuhwncbnad-fescs-sdcefsdc",
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  },
+                  {
+                    "id": 2,
+                    "sku": 12345,
+                    "name": "nike jordan",
+                    "stock": 19,
+                    "price": 1005000,
+                    "image": "img/eiuhwncbnad-fescs-sdcefsdc",
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  },
+                  {
+                    "id": 3,
+                    "sku": 12345,
+                    "name": "nike jordan",
+                    "stock": 19,
+                    "price": 1005000,
+                    "image": "img/eiuhwncbnad-fescs-sdcefsdc",
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  },
+                  {
+                    "id": 4,
+                    "sku": 12345,
+                    "name": "nike jordan",
+                    "stock": 19,
+                    "price": 1005000,
+                    "image": "img/eiuhwncbnad-fescs-sdcefsdc",
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  }
+                ],
+                "paging": {
+                  "page": 1,
+                  "totalPages": 3,
+                  "totalItems": 30
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForGetAllOrSearchOrGetByIdOrDeleteProducts": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "Product not found"
+              }
+            }
+          }
+        }
+      },
+      "SuccessDeleteProduct": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success"
+            },
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuccessForCreateOrUpdateOrGetByIdCategory": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+
+                "name": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": {
+                  "id": 1,
+                  "name": "Shoes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForCreateOrUpdateCategory": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "name must be a sting"
+              }
+            }
+          }
+        }
+      },
+      "SuccessForGetAllOrSearchCategory": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": [
+                  {
+                    "id": 1,
+                    "name": "Shoes"
+                  },
+                  {
+                    "id": 2,
+                    "name": "T-Shirt"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Bag"
+                  },
+                  {
+                    "id": 4,
+                    "name": "Ring"
+                  }
+                ],
+                "paging": {
+                  "page": 1,
+                  "totalPages": 3,
+                  "totalItems": 30
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForGetAllOrSearchOrGetByIdOrDeleteCategory": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "Category not found"
+              }
+            }
+          }
+        }
+      },
+      "SuccessDeleteCategory": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success"
+            },
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuccessForCreateOrUpdateOrGetByIdPayment": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Cash",
+                    "GoPay/GoPay Later",
+                    "ATM/Bank Transfer",
+                    "Credit/Debit Card",
+                    "ShopeePay/SPayLater",
+                    "QRIS"
+                  ]
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": {
+                  "id": 1,
+                  "name": "GoPay",
+                  "type": "GoPay/GoPay Later"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForCreateOrUpdatePayment": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "invalid type payment"
+              }
+            }
+          }
+        }
+      },
+      "SuccessForGetAllOrSearchPayment": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Cash",
+                    "GoPay/GoPay Later",
+                    "ATM/Bank Transfer",
+                    "Credit/Debit Card",
+                    "ShopeePay/SPayLater",
+                    "QRIS"
+                  ]
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": [
+                  {
+                    "id": 1,
+                    "name": "GoPay",
+                    "type": "GoPay/GoPay Later"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Cash",
+                    "type": "Cash"
+                  },
+                  {
+                    "id": 3,
+                    "name": "BCA",
+                    "type": "ATM/Bank Transfer"
+                  },
+                  {
+                    "id": 4,
+                    "name": "ShopeePay",
+                    "type": "ShopeePay/SPayLater"
+                  }
+                ],
+                "paging": {
+                  "page": 1,
+                  "totalPages": 3,
+                  "totalItems": 30
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForGetAllOrSearchOrGetByIdOrDeletePayment": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "payment not found"
+              }
+            }
+          }
+        }
+      },
+      "SuccessDeletePayment": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success"
+            },
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuccessForCreateOrUpdateOrGetByIdOrder": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "payment_id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "total_price": {
+                  "type": "number"
+                },
+                "total_paid": {
+                  "type": "number"
+                },
+                "total_return": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": {
+                  "id": 1,
+                  "payment_id": 1,
+                  "name": "Budi",
+                  "total_price": 150000,
+                  "total_paid": 150000,
+                  "total_return": 150000,
+                  "created_at": "2021-12-20",
+                  "updated_at": "2022-01-20"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForCreateOrUpdateOrder": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "payment not found"
+              }
+            }
+          }
+        }
+      },
+      "SuccessForGetAllOrSearchOrder": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "payment_id": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "total_price": {
+                  "type": "number"
+                },
+                "total_paid": {
+                  "type": "number"
+                },
+                "total_return": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "example": {
+                "message": "success",
+                "data": [
+                  {
+                    "id": 1,
+                    "payment_id": 1,
+                    "name": "Budi",
+                    "total_price": 150000,
+                    "total_paid": 150000,
+                    "total_return": 150000,
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  },
+                  {
+                    "id": 2,
+                    "payment_id": 1,
+                    "name": "Asep",
+                    "total_price": 150000,
+                    "total_paid": 150000,
+                    "total_return": 150000,
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  },
+                  {
+                    "id": 3,
+                    "payment_id": 1,
+                    "name": "Ruby",
+                    "total_price": 150000,
+                    "total_paid": 150000,
+                    "total_return": 150000,
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  },
+                  {
+                    "id": 4,
+                    "payment_id": 1,
+                    "name": "Layla",
+                    "total_price": 150000,
+                    "total_paid": 150000,
+                    "total_return": 150000,
+                    "created_at": "2021-12-20",
+                    "updated_at": "2022-01-20"
+                  }
+                ],
+                "paging": {
+                  "page": 1,
+                  "totalPages": 3,
+                  "totalItems": 30
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorForGetAllOrSearchOrGetByIdOrDeleteOrder": {
+        "description": "error in validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "errors": "order not found"
+              }
+            }
+          }
+        }
+      },
+      "SuccessDeleteOrder": {
+        "description": "success",
+        "content": {
+          "application/json": {
+            "example": {
+              "message": "success"
+            },
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

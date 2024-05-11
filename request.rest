@@ -1,0 +1,83 @@
+POST http://localhost:3000/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "test",
+    "full_name": "test",
+    "role": "ADMIN",
+    "email": "test@gmail.com",
+    "password": "rahasia"
+}
+
+###
+POST http://localhost:3000/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "cashier",
+    "full_name": "test",
+    "role": "CASHIER",
+    "email": "cashier@gmail.com",
+    "password": "rahasia"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "test",
+    "password": "rahasia"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "cashier",
+    "password": "rahasia"
+}
+
+###
+GET  http://localhost:3000/users
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDc3ODIxNDksImV4cCI6MTcwNzc4MjE3OX0.qrC3AchcUpb3293rbevBRcwzzSa0XSe7t8ssFqRmoTM
+
+###
+PATCH  http://localhost:3000/users
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiQ0FTSElFUiIsImlhdCI6MTcwNzQzMjg2MCwiZXhwIjoxNzA3NDMyOTYwfQ.G4DU0oxek40eoVM6qoMNOxHvj80Sf6_Us5hokBwOQro
+
+{
+    "full_name": "test-update"
+}
+
+###
+DELETE  http://localhost:3000/logout
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDc3ODM3OTcsImV4cCI6MTcwNzc4MzgyN30.3_L1yFJs65Z0nSeuBnYy9eKYfiTcYeefHvqRqWs2Wfg
+
+
+###
+POST http://localhost:3000/categories
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDgzMjg3MTEsImV4cCI6MTcwODMyODgzMX0.blfoOlucmwv2WZQMlQ0tWrecf0qGyYtumGh6O_0PGu0
+
+{
+    "name": "baju"
+}
+
+###
+GET http://localhost:3000/categories
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDc5NDk3ODcsImV4cCI6MTcwNzk0OTgxN30.YewppootErvJxJ02g9p6QVhP3cvvg80fw7wdQCLruYM                                                                                                                          

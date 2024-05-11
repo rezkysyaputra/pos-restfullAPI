@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  username String @unique @db.VarChar(255)
+  full_name String @db.VarChar(255)
+  email String @unique
+  role Role @default(CASHIER)
+  password String @db.VarChar(100)
+  refresh_token String? 
+
+  orders Order[]
+
+  @@map("users")
+}
+ 
+enum Role {
+  CASHIER
+  ADMIN
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique  @db.VarChar(255)
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  sku Int @unique
+  name String @db.VarChar(100)
+  stock Int
+  price Float
+  image String
+  category_id Int?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  order_products OrderProduct[]
+
+  category Category? @relation(fields: [category_id], references: [id])
+  @@map("products")
+}
+
+model OrderProduct {
+  id Int @id @default(autoincrement())
+  order_id Int
+  product_id Int
+  quantity Int
+  total_price Float
+
+  product Product @relation(fields: [product_id], references: [id])
+  order Order @relation(fields: [order_id], references: [id])
+  @@map("order_products")
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+  name String @unique  @db.VarChar(100)
+  type String @db.VarChar(100)
+  orders Order[]
+  @@map("payments")
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  username String @db.VarChar(100)
+  payment_id Int
+  name  String @db.VarChar(100)
+  total_price Float
+  total_paid Float
+  total_return Float
+  receipt_id String @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  order_products OrderProduct[]
+
+  payment Payment @relation(fields: [payment_id], references: [id])
+  user User @relation(fields: [username], references: [username])
+  @@map("orders")
+}
