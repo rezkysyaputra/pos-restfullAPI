@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import logger from './logger.js';
+import logger from './logger';
 
 const prisma = new PrismaClient({
   log: [
@@ -26,13 +26,13 @@ prisma.$on('error', (e) => {
   logger.error(e);
 });
 prisma.$on('warn', (e) => {
-  logger.error(e);
+  logger.warn(e);
 });
 prisma.$on('info', (e) => {
-  logger.error(e);
+  logger.info(e);
 });
 prisma.$on('query', (e) => {
-  logger.error(e);
+  logger.info(e);
 });
 
 export default prisma;

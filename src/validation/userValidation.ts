@@ -1,4 +1,15 @@
 import Joi from 'joi';
+import { z, ZodType } from 'zod';
+
+export class UserValidation {
+  static readonly REGISTER: ZodType = z.object({
+    username: z.string().max(100),
+    full_name: z.string().max(255),
+    email: z.string().max(100).email(),
+    role: z.enum(['ADMIN', 'CASHIER']),
+    password: z.string().max(100),
+  });
+}
 
 const registerUserValidation = Joi.object({
   username: Joi.string().max(100).required(),

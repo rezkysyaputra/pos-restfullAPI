@@ -12,11 +12,11 @@ datasource db {
 
 model User {
   username String @unique @db.VarChar(255)
-  full_name String @db.VarChar(255)
+  fullName String @db.VarChar(255)
   email String @unique
   role Role @default(CASHIER)
   password String @db.VarChar(100)
-  refresh_token String? 
+  refresh_token String?
 
   orders Order[]
 
@@ -44,24 +44,24 @@ model Product {
   stock Int
   price Float
   image String
-  category_id Int?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  order_products OrderProduct[]
+  categoryId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orderProducts OrderProduct[]
 
-  category Category? @relation(fields: [category_id], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id])
   @@map("products")
 }
 
 model OrderProduct {
   id Int @id @default(autoincrement())
-  order_id Int
-  product_id Int
+  orderId Int
+  productId Int
   quantity Int
-  total_price Float
+  totalPrice Float
 
-  product Product @relation(fields: [product_id], references: [id])
-  order Order @relation(fields: [order_id], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  order Order @relation(fields: [orderId], references: [id])
   @@map("order_products")
 }
 
@@ -76,18 +76,18 @@ model Payment {
 model Order {
   id Int @id @default(autoincrement())
   username String @db.VarChar(100)
-  payment_id Int
+  paymentId Int
   name  String @db.VarChar(100)
-  total_price Float
-  total_paid Float
-  total_return Float
-  receipt_id String @unique
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  totalPrice Float
+  totalPaid Float
+  totalReturn Float
+  receiptId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   order_products OrderProduct[]
 
-  payment Payment @relation(fields: [payment_id], references: [id])
+  payment Payment @relation(fields: [paymentId], references: [id])
   user User @relation(fields: [username], references: [username])
   @@map("orders")
 }
