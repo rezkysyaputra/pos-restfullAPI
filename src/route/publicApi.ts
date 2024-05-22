@@ -5,6 +5,6 @@ const publicRouter = Router();
 
 // USER
 publicRouter.post('/api/register', UserController.register);
-// publicRouter.post('/login', userController.login);
+publicRouter.post('/api/login', UserController.login);
 
 export default publicRouter;

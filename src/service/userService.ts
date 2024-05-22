@@ -1,20 +1,20 @@
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-// import {
-//   loginUserValidation,
-//   registerUserValidation,
-//   updateUserValidation,
-//   UserValidation,
-// } from '../validation/userValidation.js';
 import prisma from '../app/database';
-
 import ResponseError from '../error/responseError';
-import { CreateUserRequest, UserResponse } from '../model/userModel';
+import {
+  CreateUserRequest,
+  LoginUserRequest,
+  LoginUserResponse,
+  CreateUserResponse,
+} from '../model/userModel';
 import { Validation } from '../validation/validation';
 import { UserValidation } from '../validation/userValidation';
 
 export class UserService {
-  static async register(request: CreateUserRequest): Promise<UserResponse> {
+  static async register(
+    request: CreateUserRequest
+  ): Promise<CreateUserResponse> {
     // Validate the incoming request
     const registerRequest = Validation.validate(
       UserValidation.REGISTER,
@@ -22,24 +22,23 @@ export class UserService {
     );
 
     // Check if a user with the same username or email already exists
-    const findUsernameOREmail = await prisma.user.findFirst({
+    const checkUsername = await prisma.user.findFirst({
       where: {
-        OR: [
-          {
-            username: registerRequest.username,
-          },
-          {
-            email: registerRequest.email,
-          },
-        ],
+        username: registerRequest.username,
       },
     });
 
-    // Throw appropriate error if the username or email already exists
-    if (findUsernameOREmail && findUsernameOREmail.username) {
-      console.log(findUsernameOREmail.username);
+    if (checkUsername) {
       throw new ResponseError(400, 'Username already exists');
-    } else if (findUsernameOREmail && findUsernameOREmail.email) {
+    }
+
+    const checkEmail = await prisma.user.findFirst({
+      where: {
+        email: registerRequest.email,
+      },
+    });
+
+    if (checkEmail) {
       throw new ResponseError(400, 'Email already exists');
     }
 
@@ -59,43 +58,51 @@ export class UserService {
 
     return createNewUser;
   }
+
+  static async login(request: LoginUserRequest): Promise<LoginUserResponse> {
+    const loginRequest = Validation.validate(UserValidation.LOGIN, request);
+
+    const matchUser = await prisma.user.findFirst({
+      where: {
+        username: loginRequest.username,
+      },
+    });
+
+    if (!matchUser) {
+      throw new ResponseError(400, 'username or password wrong');
+    }
+
+    const matchPassword = await bcrypt.compare(
+      loginRequest.password,
+      matchUser.password
+    );
+
+    if (!matchPassword) {
+      throw new ResponseError(400, 'username or password wrong');
+    }
+
+    // Creating a access token
+    const accessToken = jwt.sign(
+      matchUser,
+      process.env.ACCESS_TOKEN_SECRET as string,
+      {
+        expiresIn: '1h',
+      }
+    );
+
+    // Creating a refresh token
+    const refreshToken = jwt.sign(
+      loginRequest,
+      process.env.REFRESH_TOKEN_SECRET as string,
+      { expiresIn: '1d' }
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
 }
-
-// const register = async (request) => {
-//   const reqData = validate(registerUserValidation, request);
-
-//   const countUser = await prisma.user.count({
-//     where: {
-//       username: reqData.username,
-//     },
-//   });
-//   if (countUser) {
-//     throw new ResponseError(400, 'username already exists');
-//   }
-
-//   const countEmail = await prisma.user.count({
-//     where: {
-//       email: reqData.email,
-//     },
-//   });
-//   if (countEmail) {
-//     throw new ResponseError(400, 'email already exists');
-//   }
-
-//   reqData.password = await bcrypt.hash(reqData.password, 10);
-
-//   const createNewUser = await prisma.user.create({
-//     data: reqData,
-//     select: {
-//       username: true,
-//       full_name: true,
-//       role: true,
-//       email: true,
-//     },
-//   });
-
-//   return createNewUser;
-// };
 
 // const login = async (request) => {
 //   const reqData = validate(loginUserValidation, request);

@@ -1,9 +1,8 @@
-export type UserResponse = {
+export type CreateUserResponse = {
   username: string;
   fullName: string;
   email: string;
   role: string;
-  token?: string;
 };
 
 enum Roles {
@@ -15,5 +14,15 @@ export type CreateUserRequest = {
   fullName: string;
   email: string;
   role: Roles;
+  password: string;
+};
+
+export type LoginUserResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type LoginUserRequest = {
+  username: string;
   password: string;
 };

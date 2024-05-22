@@ -14,9 +14,8 @@ model User {
   username String @unique @db.VarChar(255)
   fullName String @db.VarChar(255)
   email String @unique
-  role Role @default(CASHIER)
+  role Role @default(CASHIER) 
   password String @db.VarChar(100)
-  refresh_token String?
 
   orders Order[]
 
