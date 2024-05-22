@@ -1,5 +1,5 @@
-import logger from './app/logger.js';
-import web from './app/web.js';
+import logger from './app/logger';
+import web from './app/web';
 
 const port: number = 3000;
 web.listen(port, () => {

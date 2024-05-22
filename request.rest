@@ -1,23 +1,23 @@
-POST http://localhost:3000/register
+POST http://localhost:3000/api/register
 Content-Type: application/json
 Accept: application/json
 
 {
-    "username": "test",
-    "full_name": "test",
+    "username": "test2222",
+    "fullName": "test",
     "role": "ADMIN",
-    "email": "test@gmail.com",
+    "email": "test2@gmail.com",
     "password": "rahasia"
 }
 
 ###
-POST http://localhost:3000/register
+POST http://localhost:3000/api/register
 Content-Type: application/json
 Accept: application/json
 
 {
     "username": "cashier",
-    "full_name": "test",
+    "fullName": "test",
     "role": "CASHIER",
     "email": "cashier@gmail.com",
     "password": "rahasia"
