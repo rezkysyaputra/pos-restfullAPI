@@ -92,7 +92,7 @@ export class UserService {
 
     // Creating a refresh token
     const refreshToken = jwt.sign(
-      loginRequest,
+      matchUser,
       process.env.REFRESH_TOKEN_SECRET as string,
       { expiresIn: '1d' }
     );

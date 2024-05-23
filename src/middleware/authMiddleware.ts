@@ -1,25 +1,37 @@
-// import jwt from 'jsonwebtoken';
+import { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import ResponseError from '../error/responseError';
 
-// const verifyToken = async (req, res, next) => {
-//   try {
-//     const authHeader = req.get('Authorization');
-//     const token = authHeader ? authHeader.split(' ')[1] : null;
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: any;
+  }
+}
 
-//     if (!token) {
-//       return res.status(401).json({
-//         errors: 'unauthorized',
-//       });
-//     }
+export const verifyAccessToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const authHeader = req.get('X-API-TOKEN');
+    const token = authHeader ? authHeader.split(' ')[1] : null;
 
-//     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-//     req.user = decoded;
-//     next();
-//   } catch (err) {
-//     return res.status(401).json({
-//       errors: 'unauthorized',
-//     });
-//   }
-// };
+    if (!token) {
+      throw new ResponseError(401, 'unauthorized');
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET as string
+    );
+
+    req.user = decoded;
+    next();
+  } catch (err) {
+    throw new ResponseError(401, 'unauthorized');
+  }
+};
 
 // const verifyRoleUser = (requiredRoles) => async (req, res, next) => {
 //   try {
