@@ -6,15 +6,15 @@ import {
   CreateUserRequest,
   LoginUserRequest,
   LoginUserResponse,
-  CreateUserResponse,
+  UpdateUserRequest,
+  UserResponse,
 } from '../model/userModel';
 import { Validation } from '../validation/validation';
 import { UserValidation } from '../validation/userValidation';
+import { User } from '@prisma/client';
 
 export class UserService {
-  static async register(
-    request: CreateUserRequest
-  ): Promise<CreateUserResponse> {
+  static async register(request: CreateUserRequest): Promise<UserResponse> {
     // Validate the incoming request
     const registerRequest = Validation.validate(
       UserValidation.REGISTER,
@@ -83,7 +83,7 @@ export class UserService {
 
     // Creating a access token
     const accessToken = jwt.sign(
-      matchUser,
+      loginRequest,
       process.env.ACCESS_TOKEN_SECRET as string,
       {
         expiresIn: '1h',
@@ -92,7 +92,7 @@ export class UserService {
 
     // Creating a refresh token
     const refreshToken = jwt.sign(
-      matchUser,
+      loginRequest,
       process.env.REFRESH_TOKEN_SECRET as string,
       { expiresIn: '1d' }
     );
@@ -102,70 +102,52 @@ export class UserService {
       refreshToken,
     };
   }
+
+  static async get(user: User): Promise<UserResponse> {
+    const getUser = await prisma.user.findFirst({
+      where: {
+        username: user.username,
+      },
+      select: {
+        username: true,
+        fullName: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    if (!getUser) {
+      throw new ResponseError(404, 'User not found');
+    }
+    return getUser;
+  }
+
+  static async update(
+    user: User,
+    req: UpdateUserRequest
+  ): Promise<UserResponse> {
+    const newUserData = Validation.validate(UserValidation.UPDATE, req);
+
+    if (newUserData.password) {
+      newUserData.password = await bcrypt.hash(newUserData.password, 10);
+    }
+
+    const updateUserData = await prisma.user.update({
+      where: {
+        username: user.username,
+      },
+      data: newUserData,
+      select: {
+        username: true,
+        fullName: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    return updateUserData;
+  }
 }
-
-// const login = async (request) => {
-//   const reqData = validate(loginUserValidation, request);
-
-//   const usernameMatch = await prisma.user.count({
-//     where: {
-//       username: reqData.username,
-//     },
-//   });
-
-//   if (!usernameMatch) {
-//     throw new ResponseError(400, 'username or password wrong');
-//   }
-
-//   const user = await prisma.user.findFirst({
-//     where: {
-//       username: reqData.username,
-//     },
-//   });
-
-//   const passwordMatch = await bcrypt.compare(reqData.password, user.password);
-
-//   if (!passwordMatch) {
-//     throw new ResponseError(400, 'username or password wrong');
-//   }
-
-//   function generateToken(secretKey, exp) {
-//     return jwt.sign({ username: user.username, role: user.role }, secretKey, {
-//       expiresIn: exp,
-//     });
-//   }
-
-//   const accessToken = generateToken(process.env.ACCESS_TOKEN_SECRET, '120s');
-//   const refreshToken = generateToken(process.env.REFRESH_TOKEN_SECRET, '1d');
-
-//   await prisma.user.update({
-//     where: {
-//       username: user.username,
-//     },
-
-//     data: {
-//       refresh_token: refreshToken,
-//     },
-//   });
-
-//   return { accessToken, refreshToken };
-// };
-
-// const get = async (user) => {
-//   const getData = await prisma.user.findFirst({
-//     where: {
-//       username: user.username,
-//     },
-//     select: {
-//       username: true,
-//       full_name: true,
-//       email: true,
-//       role: true,
-//     },
-//   });
-
-//   return getData;
-// };
 
 // const update = async (user, request) => {
 //   const newData = validate(updateUserValidation, request);

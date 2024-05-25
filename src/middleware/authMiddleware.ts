@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import ResponseError from '../error/responseError';
 
 declare module 'express-serve-static-core' {
   interface Request {
@@ -14,22 +13,24 @@ export const verifyAccessToken = async (
   next: NextFunction
 ) => {
   try {
-    const authHeader = req.get('X-API-TOKEN');
-    const token = authHeader ? authHeader.split(' ')[1] : null;
+    const token = req.get('X-API-TOKEN');
 
     if (!token) {
-      throw new ResponseError(401, 'unauthorized');
+      res.status(401).json({
+        errors: 'unauthorized',
+      });
     }
-
     const decoded = jwt.verify(
-      token,
+      token as string,
       process.env.ACCESS_TOKEN_SECRET as string
     );
 
     req.user = decoded;
     next();
-  } catch (err) {
-    throw new ResponseError(401, 'unauthorized');
+  } catch (err: any) {
+    res.status(401).json({
+      errors: 'unauthorized',
+    });
   }
 };
 

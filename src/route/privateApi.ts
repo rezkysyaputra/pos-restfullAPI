@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { verifyAccessToken } from '../middleware/authMiddleware';
-// import { verifyRoleUser, verifyToken } from '../middleware/auth-middleware.js';
+import { UserController } from '../controller/userController';
 // import userController from '../controller/user-controller.js';
 // import categoryController from '../controller/category-controller.js';
 // import productController from '../controller/product-controller.js';
@@ -10,11 +10,9 @@ const privateRoute: Router = Router();
 
 privateRoute.use(verifyAccessToken);
 
-// REFRESH TOKEN
-
 /// USER
-// privateRoute.get('/users', userController.get);
-// privateRoute.patch('/users', userController.update);
+privateRoute.get('/api/users', UserController.get);
+privateRoute.patch('/api/users', UserController.update);
 // privateRoute.delete('/logout', userController.logout);
 
 // // CATEGORY
@@ -45,4 +43,4 @@ privateRoute.use(verifyAccessToken);
 // );
 // privateRoute.get('/products/:productId', productController.get);
 
-// export default privateRoute;
+export default privateRoute;
