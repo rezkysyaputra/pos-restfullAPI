@@ -28,10 +28,3 @@ export class UserValidation {
     })
     .strict();
 }
-
-// const updateUserValidation = Joi.object({
-//   full_name: Joi.string().max(255).optional(),
-//   email: Joi.string().max(100).email().optional(),
-//   role: Joi.string().valid('ADMIN', 'CASHIER').optional(),
-//   password: Joi.string().max(100).optional(),
-// });

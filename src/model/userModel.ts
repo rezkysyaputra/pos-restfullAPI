@@ -1,3 +1,5 @@
+import { string } from 'zod';
+
 export type UserResponse = {
   username: string;
   fullName: string;

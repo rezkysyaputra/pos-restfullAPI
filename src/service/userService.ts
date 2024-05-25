@@ -149,29 +149,6 @@ export class UserService {
   }
 }
 
-// const update = async (user, request) => {
-//   const newData = validate(updateUserValidation, request);
-
-//   if (newData.password) {
-//     newData.password = await bcrypt.hash(newData.password, 10);
-//   }
-
-//   const updateDataUser = await prisma.user.update({
-//     where: {
-//       username: user.username,
-//     },
-//     data: newData,
-//     select: {
-//       username: true,
-//       full_name: true,
-//       email: true,
-//       role: true,
-//     },
-//   });
-
-//   return updateDataUser;
-// };
-
 // const logout = async (user) => {
 //   const deleteToken = await prisma.user.update({
 //     where: {

@@ -13,7 +13,7 @@ privateRoute.use(verifyAccessToken);
 /// USER
 privateRoute.get('/api/users', UserController.get);
 privateRoute.patch('/api/users', UserController.update);
-// privateRoute.delete('/logout', userController.logout);
+privateRoute.delete('/api/logout', UserController.logout);
 
 // // CATEGORY
 // privateRoute.post(
