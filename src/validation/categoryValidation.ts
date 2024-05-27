@@ -1,15 +1,21 @@
-// import Joi from 'joi';
+import { z, ZodType } from 'zod';
 
-// const reqCategoryValidation = Joi.object({
-//   name: Joi.string().optional(),
-// });
+export class CategoryValidation {
+  static readonly CATEGORY: ZodType = z.object({
+    name: z.string().max(255),
+  });
+
+  static readonly LIST: ZodType = z
+    .object({
+      name: z.string().optional(),
+      page: z.number().positive().default(1),
+      size: z.number().positive().default(10),
+    })
+    .strict();
+}
+
 // const IdCategoryValidation = Joi.number().positive().required();
 
-// const searchCategoryValidation = Joi.object({
-//   name: Joi.string().optional(),
-//   page: Joi.number().positive().default(1).optional(),
-//   size: Joi.number().positive().default(10).optional(),
-// });
 // const updateCategoryValidation = Joi.object({
 //   name: Joi.string().optional(),
 //   categoryId: Joi.number().positive().required(),

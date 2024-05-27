@@ -1,3 +1,4 @@
+import { Validation } from './../validation/validation';
 // import prisma from '../app/database.js';
 // import ResponseError from '../error/responseError.js';
 // import {
@@ -6,6 +7,75 @@
 //   searchCategoryValidation,
 // } from '../joi-validation/category-validation.js';
 // import validate from '../joi-validation/validation.js';
+
+import { CategoryModel, CategoryResponse } from '../model/categoryModel';
+import { CategoryValidation } from '../validation/categoryValidation';
+import prisma from '../app/database';
+import ResponseError from '../error/responseError';
+import { ListCategoryRequest } from '../model/categoryModel';
+
+export class CategoryService {
+  static async create(req: CategoryModel): Promise<CategoryModel> {
+    const category = Validation.validate(CategoryValidation.CATEGORY, req);
+
+    const categoryCount = await prisma.category.count({
+      where: {
+        name: category.name,
+      },
+    });
+
+    if (categoryCount) {
+      throw new ResponseError(400, 'category already exists');
+    }
+
+    const createNewCategory = await prisma.category.create({
+      data: category,
+    });
+
+    return createNewCategory;
+  }
+
+  static async list(req: ListCategoryRequest): Promise<CategoryResponse> {
+    const params = Validation.validate(CategoryValidation.LIST, req);
+
+    const skipProduct: number = (params.page! - 1) * params.size!;
+    const totalCategories: number = await prisma.category.count({
+      where: {
+        name: {
+          contains: params.name,
+        },
+      },
+    });
+
+    if (!totalCategories) {
+      throw new ResponseError(404, 'category not found');
+    }
+
+    const categories = await prisma.category.findMany({
+      where: {
+        name: {
+          contains: params.name,
+        },
+      },
+      take: params.size,
+      skip: skipProduct,
+    });
+
+    if (!categories.length) {
+      throw new ResponseError(404, 'category not found');
+    }
+
+    return {
+      data: categories,
+      paging: {
+        page: params.page!,
+        size: categories.length,
+        totalItems: totalCategories,
+        totalPages: Math.ceil(totalCategories / params.size!),
+      },
+    };
+  }
+}
 
 // const categoryIdMatch = async (id) => {
 //   const categoryId = validate(IdCategoryValidation, id);
@@ -19,26 +89,6 @@
 //     throw new ResponseError(404, 'category not found');
 //   }
 //   return categoryId;
-// };
-
-// const create = async (request) => {
-//   const reqData = validate(reqCategoryValidation, request);
-
-//   const categoryMatch = await prisma.category.count({
-//     where: {
-//       name: reqData.name,
-//     },
-//   });
-
-//   if (categoryMatch) {
-//     throw new ResponseError(400, 'category already exists');
-//   }
-
-//   const createNewCategory = await prisma.category.create({
-//     data: reqData,
-//   });
-
-//   return createNewCategory;
 // };
 
 // const list = async (request) => {

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { verifyAccessToken } from '../middleware/authMiddleware';
 import { UserController } from '../controller/userController';
+import { CategoryController } from '../controller/categoryController';
 // import userController from '../controller/user-controller.js';
 // import categoryController from '../controller/category-controller.js';
 // import productController from '../controller/product-controller.js';
@@ -15,13 +16,9 @@ privateRoute.get('/api/users', UserController.get);
 privateRoute.patch('/api/users', UserController.update);
 privateRoute.delete('/api/logout', UserController.logout);
 
-// // CATEGORY
-// privateRoute.post(
-//   '/categories',
-//   verifyRoleUser('ADMIN'),
-//   categoryController.create
-// );
-// privateRoute.get('/categories', categoryController.list);
+// CATEGORY
+privateRoute.post('/api/categories', CategoryController.create);
+privateRoute.get('/api/categories', CategoryController.list);
 // privateRoute.get('/categories/:categoryId', categoryController.get);
 // privateRoute.patch(
 //   '/categories/:categoryId',
