@@ -19,7 +19,7 @@ privateRoute.delete('/api/logout', UserController.logout);
 // CATEGORY
 privateRoute.post('/api/categories', CategoryController.create);
 privateRoute.get('/api/categories', CategoryController.list);
-// privateRoute.get('/categories/:categoryId', categoryController.get);
+privateRoute.get('/api/categories/:categoryId', CategoryController.get);
 // privateRoute.patch(
 //   '/categories/:categoryId',
 //   verifyRoleUser('ADMIN'),

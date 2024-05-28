@@ -8,7 +8,12 @@ import { Validation } from './../validation/validation';
 // } from '../joi-validation/category-validation.js';
 // import validate from '../joi-validation/validation.js';
 
-import { CategoryModel, CategoryResponse } from '../model/categoryModel';
+import {
+  CategoryModel,
+  CategoryRequestId,
+  CategoryResponse,
+  CategoryResponseById,
+} from '../model/categoryModel';
 import { CategoryValidation } from '../validation/categoryValidation';
 import prisma from '../app/database';
 import ResponseError from '../error/responseError';
@@ -75,21 +80,33 @@ export class CategoryService {
       },
     };
   }
+  static async get(id: CategoryRequestId): Promise<CategoryResponseById> {
+    const categoryId = await categoryIdMatch(id);
+
+    const category = await prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    return category!;
+  }
 }
 
-// const categoryIdMatch = async (id) => {
-//   const categoryId = validate(IdCategoryValidation, id);
+const categoryIdMatch = async (id: CategoryRequestId) => {
+  const categoryId = Validation.validate(CategoryValidation.ID, id);
 
-//   const category = await prisma.category.count({
-//     where: {
-//       id: categoryId,
-//     },
-//   });
-//   if (!category) {
-//     throw new ResponseError(404, 'category not found');
-//   }
-//   return categoryId;
-// };
+  const category = await prisma.category.count({
+    where: {
+      id: categoryId,
+    },
+  });
+
+  if (!category) {
+    throw new ResponseError(404, 'category not found');
+  }
+  return categoryId;
+};
 
 // const list = async (request) => {
 //   const params = validate(searchCategoryValidation, request);

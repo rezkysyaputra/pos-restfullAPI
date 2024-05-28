@@ -24,3 +24,10 @@ export type ListCategoryRequest = {
   page: number | undefined;
   size: number | undefined;
 };
+
+export type CategoryRequestId = number;
+
+export type CategoryResponseById = {
+  id: number;
+  name: string;
+};

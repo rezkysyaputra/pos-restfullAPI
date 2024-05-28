@@ -29,25 +29,20 @@ export class CategoryController {
       next(e);
     }
   }
+
+  static async get(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { categoryId } = req.params;
+      const result = await CategoryService.get(Number(categoryId));
+      res.status(200).json({
+        data: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
-// const list = async (req, res, next) => {
-//   try {
-//     const request = {
-//       name: req.query.name,
-//       page: req.query.page,
-//       size: req.query.size,
-//     };
-//     const result = await categoryService.list(request);
-//     res.status(200).json({
-//       message: 'success',
-//       data: result.data,
-//       paging: result.paging,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 // const get = async (req, res, next) => {
 //   try {
 //     const { categoryId } = req.params;

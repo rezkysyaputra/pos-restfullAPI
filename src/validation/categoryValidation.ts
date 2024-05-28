@@ -12,6 +12,8 @@ export class CategoryValidation {
       size: z.number().positive().default(10),
     })
     .strict();
+
+  static readonly ID: ZodType = z.number().positive();
 }
 
 // const IdCategoryValidation = Joi.number().positive().required();
