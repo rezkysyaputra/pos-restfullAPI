@@ -41,35 +41,20 @@ export class CategoryController {
       next(e);
     }
   }
+
+  static async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const request = req.body;
+      const { categoryId } = req.params;
+      const result = await CategoryService.update(Number(categoryId), request);
+      res.status(200).json({
+        data: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
-
-// const get = async (req, res, next) => {
-//   try {
-//     const { categoryId } = req.params;
-//     const result = await categoryService.get(categoryId);
-//     res.status(200).json({
-//       message: 'success',
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const update = async (req, res, next) => {
-//   try {
-//     const request = req.body;
-//     const { categoryId } = req.params;
-
-//     const result = await categoryService.update(categoryId, request);
-//     res.status(200).json({
-//       message: 'success',
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 // const remove = async (req, res, next) => {
 //   try {

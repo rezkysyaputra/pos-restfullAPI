@@ -31,3 +31,8 @@ export type CategoryResponseById = {
   id: number;
   name: string;
 };
+
+export type CategoryUpdateRequest = {
+  categoryId: number;
+  name: string;
+};

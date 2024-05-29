@@ -6,6 +6,7 @@ import {
   CreateUserRequest,
   LoginUserRequest,
   LoginUserResponse,
+  token,
   UpdateUserRequest,
   UserResponse,
 } from '../model/userModel';
@@ -146,6 +147,10 @@ export class UserService {
     });
 
     return updateUserData;
+  }
+  static async logout(user: User): Promise<string> {
+    const message: string = `User ${user.username} logged out`;
+    return message;
   }
 }
 

@@ -34,3 +34,5 @@ export type LoginUserRequest = {
   username: string;
   password: string;
 };
+
+export type token = string;

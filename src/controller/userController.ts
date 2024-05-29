@@ -1,6 +1,7 @@
 import { UserService } from '../service/userService';
 import { Request, Response, NextFunction } from 'express';
 import { CreateUserRequest, LoginUserRequest } from '../model/userModel';
+import { User } from '@prisma/client';
 
 declare module 'express-serve-static-core' {
   interface Request {
@@ -43,7 +44,7 @@ export class UserController {
 
   static async get(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.user;
+      const user: User = req.user;
       const result = await UserService.get(user);
       res.status(200).json({
         data: result,
@@ -55,7 +56,7 @@ export class UserController {
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.user;
+      const user: User = req.user;
       const request = req.body;
       const result = await UserService.update(user, request);
       res.status(200).json({
@@ -68,11 +69,10 @@ export class UserController {
   static async logout(req: Request, res: Response, next: NextFunction) {
     try {
       res.clearCookie('jwt');
-
+      const user: User = req.user;
+      const result = await UserService.logout(user);
       res.status(200).json({
-        data: {
-          message: 'You have been logged out',
-        },
+        message: result,
       });
     } catch (e) {
       next(e);
