@@ -21,11 +21,7 @@ privateRoute.post('/api/categories', CategoryController.create);
 privateRoute.get('/api/categories', CategoryController.list);
 privateRoute.get('/api/categories/:categoryId', CategoryController.get);
 privateRoute.patch('/api/categories/:categoryId', CategoryController.update);
-// privateRoute.delete(
-//   '/categories/:categoryId',
-//   verifyRoleUser('ADMIN'),
-//   categoryController.remove
-// );
+privateRoute.delete('/api/categories/:categoryId', CategoryController.delete);
 
 // // PRODUCT
 // privateRoute.post(

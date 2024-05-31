@@ -153,16 +153,3 @@ export class UserService {
     return message;
   }
 }
-
-// const logout = async (user) => {
-//   const deleteToken = await prisma.user.update({
-//     where: {
-//       username: user.username,
-//     },
-//     data: {
-//       refresh_token: null,
-//     },
-//   });
-
-//   return deleteToken;
-// };

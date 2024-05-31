@@ -102,22 +102,19 @@ export class CategoryService {
 
     return updateCategory;
   }
+
+  static async delete(id: CategoryRequestId): Promise<string> {
+    const categoryId = await categoryIdMatch(id);
+
+    const category = await prisma.category.delete({
+      where: {
+        id: categoryId,
+      },
+    });
+    const message: string = `Category ${category.name} has been deleted}`;
+    return message;
+  }
 }
-
-// const update = async (id, request) => {
-//   const categoryId = await categoryIdMatch(id);
-
-//   const newData = validate(reqCategoryValidation, request);
-
-//   const updateCategory = await prisma.category.update({
-//     where: {
-//       id: categoryId,
-//     },
-//     data: newData,
-//   });
-
-//   return updateCategory;
-// };
 
 // const remove = async (id) => {
 //   const categoryId = await categoryIdMatch(id);

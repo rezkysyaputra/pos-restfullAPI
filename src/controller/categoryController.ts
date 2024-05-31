@@ -54,6 +54,18 @@ export class CategoryController {
       next(e);
     }
   }
+
+  static async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { categoryId } = req.params;
+      const result = await CategoryService.delete(Number(categoryId));
+      res.status(200).json({
+        message: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 // const remove = async (req, res, next) => {
