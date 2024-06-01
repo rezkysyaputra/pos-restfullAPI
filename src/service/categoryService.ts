@@ -4,7 +4,6 @@ import {
   CategoryRequestId,
   CategoryResponse,
   CategoryResponseById,
-  CategoryUpdateRequest,
 } from '../model/categoryModel';
 import { CategoryValidation } from '../validation/categoryValidation';
 import prisma from '../app/database';
@@ -111,27 +110,7 @@ export class CategoryService {
         id: categoryId,
       },
     });
-    const message: string = `Category ${category.name} has been deleted}`;
+    const message: string = `Category ${category.name} has been deleted`;
     return message;
   }
 }
-
-// const remove = async (id) => {
-//   const categoryId = await categoryIdMatch(id);
-
-//   await prisma.category.delete({
-//     where: {
-//       id: categoryId,
-//     },
-//   });
-
-//   return { message: 'success' };
-// };
-
-// export default {
-//   create,
-//   list,
-//   get,
-//   update,
-//   remove,
-// };

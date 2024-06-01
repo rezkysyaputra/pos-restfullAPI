@@ -17,8 +17,8 @@ export class CategoryController {
     try {
       const request = {
         name: req.query.name as string,
-        page: req.query.page ? parseInt(req.query.page as string) : undefined,
-        size: req.query.size ? parseInt(req.query.size as string) : undefined,
+        page: Number(req.query.page),
+        size: Number(req.query.size),
       };
       const result = await CategoryService.list(request);
       res.status(200).json({
@@ -67,24 +67,3 @@ export class CategoryController {
     }
   }
 }
-
-// const remove = async (req, res, next) => {
-//   try {
-//     const { categoryId } = req.params;
-
-//     const result = await categoryService.remove(categoryId);
-//     res.status(200).json({
-//       message: result.message,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// export default {
-//   create,
-//   list,
-//   get,
-//   update,
-//   remove,
-// };

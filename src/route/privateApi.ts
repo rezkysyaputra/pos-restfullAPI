@@ -2,10 +2,7 @@ import { Router } from 'express';
 import { verifyAccessToken } from '../middleware/authMiddleware';
 import { UserController } from '../controller/userController';
 import { CategoryController } from '../controller/categoryController';
-// import userController from '../controller/user-controller.js';
-// import categoryController from '../controller/category-controller.js';
-// import productController from '../controller/product-controller.js';
-// import fileUploadMiddleware from '../middleware/fileUploadMiddleware.js';
+import { ProductController } from '../controller/productController';
 
 const privateRoute: Router = Router();
 
@@ -23,13 +20,8 @@ privateRoute.get('/api/categories/:categoryId', CategoryController.get);
 privateRoute.patch('/api/categories/:categoryId', CategoryController.update);
 privateRoute.delete('/api/categories/:categoryId', CategoryController.delete);
 
-// // PRODUCT
-// privateRoute.post(
-//   '/products',
-//   verifyRoleUser('ADMIN'),
-//   fileUploadMiddleware,
-//   productController.create
-// );
+// PRODUCT
+privateRoute.post('/api/products', ProductController.create);
 // privateRoute.get('/products/:productId', productController.get);
 
 export default privateRoute;

@@ -20,9 +20,9 @@ export type CategoryResponse = {
 };
 
 export type ListCategoryRequest = {
-  name: string | undefined;
-  page: number | undefined;
-  size: number | undefined;
+  name?: string;
+  page?: number;
+  size?: number;
 };
 
 export type CategoryRequestId = number;
