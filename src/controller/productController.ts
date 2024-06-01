@@ -1,11 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import { ProductService } from '../service/productService';
+import {
+  CreateProductRequest,
+  CreateProductResponse,
+} from '../model/productModel';
 
 export class ProductController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const request = req.body;
-      const result: object = await ProductService.create(request);
+      const request: CreateProductRequest = req.body;
+      const result: CreateProductResponse = await ProductService.create(
+        request
+      );
       res.status(200).json({
         data: result,
       });

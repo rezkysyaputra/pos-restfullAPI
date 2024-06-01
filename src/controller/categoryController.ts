@@ -1,11 +1,17 @@
 import { Response, Request, NextFunction } from 'express';
 import { CategoryService } from '../service/categoryService';
+import {
+  CategoryModel,
+  CategoryResponse,
+  CategoryUpdateRequest,
+  ListCategoryRequest,
+} from '../model/categoryModel';
 
 export class CategoryController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const request = req.body;
-      const result = await CategoryService.create(request);
+      const request: CategoryModel = req.body;
+      const result: CategoryModel = await CategoryService.create(request);
       res.status(200).json({
         data: result,
       });
@@ -15,12 +21,12 @@ export class CategoryController {
   }
   static async list(req: Request, res: Response, next: NextFunction) {
     try {
-      const request = {
+      const request: ListCategoryRequest = {
         name: req.query.name as string,
         page: Number(req.query.page),
         size: Number(req.query.size),
       };
-      const result = await CategoryService.list(request);
+      const result: CategoryResponse = await CategoryService.list(request);
       res.status(200).json({
         data: result.data,
         paging: result.paging,
@@ -33,7 +39,9 @@ export class CategoryController {
   static async get(req: Request, res: Response, next: NextFunction) {
     try {
       const { categoryId } = req.params;
-      const result = await CategoryService.get(Number(categoryId));
+      const result: CategoryModel = await CategoryService.get(
+        Number(categoryId)
+      );
       res.status(200).json({
         data: result,
       });
@@ -44,9 +52,12 @@ export class CategoryController {
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const request = req.body;
+      const request: CategoryUpdateRequest = req.body;
       const { categoryId } = req.params;
-      const result = await CategoryService.update(Number(categoryId), request);
+      const result: CategoryModel = await CategoryService.update(
+        Number(categoryId),
+        request
+      );
       res.status(200).json({
         data: result,
       });
@@ -58,7 +69,7 @@ export class CategoryController {
   static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const { categoryId } = req.params;
-      const result = await CategoryService.delete(Number(categoryId));
+      const result: string = await CategoryService.delete(Number(categoryId));
       res.status(200).json({
         message: result,
       });

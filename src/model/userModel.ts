@@ -19,10 +19,10 @@ export type CreateUserRequest = {
 };
 
 export type UpdateUserRequest = {
-  fullName: string;
-  email: string;
-  role: Roles;
-  password: string;
+  fullName?: string;
+  email?: string;
+  role?: Roles;
+  password?: string;
 };
 
 export type LoginUserResponse = {
