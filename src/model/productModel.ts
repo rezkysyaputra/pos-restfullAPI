@@ -1,12 +1,13 @@
 export type ProductRequestId = number;
 
 export type CreateProductRequest = {
+  file: any;
   sku: string;
   name: string;
   price: number;
   stock: number;
-  image?: string;
-  categoryId?: number;
+  image: string | null;
+  categoryId: number | null;
 };
 
 export type CreateProductResponse = {
@@ -15,8 +16,8 @@ export type CreateProductResponse = {
   name: string;
   price: number;
   stock: number;
-  image?: string | null;
-  category?: {
+  image: string | null;
+  category: {
     id: number;
     name: string;
   } | null;

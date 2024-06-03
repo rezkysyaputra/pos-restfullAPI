@@ -8,9 +8,18 @@ import {
 export class ProductController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const request: CreateProductRequest = req.body;
+      let request: CreateProductRequest = req.body;
+      let path;
+      if (req.file) {
+        request.image = req.file.filename;
+        path = req.file.path;
+      }
+
+      console.log(req.file);
+
       const result: CreateProductResponse = await ProductService.create(
-        request
+        request,
+        path
       );
       res.status(200).json({
         data: result,
@@ -20,21 +29,6 @@ export class ProductController {
     }
   }
 }
-
-// const create = async (req, res, next) => {
-//   try {
-//     const request = req.body;
-//     request.image = req.file.path;
-//     const result = await productService.create(request);
-
-//     res.status(200).json({
-//       message: 'success',
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 // const get = async (req, res, next) => {
 //   try {

@@ -1,4 +1,5 @@
 import prisma from '../app/database';
+import fs from 'fs/promises';
 import ResponseError from '../error/responseError';
 import {
   CreateProductRequest,
@@ -9,7 +10,8 @@ import { Validation } from '../validation/validation';
 
 export class ProductService {
   static async create(
-    req: CreateProductRequest
+    req: CreateProductRequest,
+    path: any
   ): Promise<CreateProductResponse> {
     const productRequest = Validation.validate(ProductValidation.CREATE, req);
 
@@ -20,6 +22,7 @@ export class ProductService {
     });
 
     if (matchSku) {
+      await fs.unlink(path);
       throw new ResponseError(400, 'sku already exists');
     }
 
