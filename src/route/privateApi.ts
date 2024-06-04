@@ -24,6 +24,6 @@ privateRoute.delete('/api/categories/:categoryId', CategoryController.delete);
 
 // PRODUCT
 privateRoute.post('/api/products', upload, ProductController.create);
-// privateRoute.get('/products/:productId', productController.get);
+privateRoute.get('/api/products/:productId', ProductController.get);
 
 export default privateRoute;

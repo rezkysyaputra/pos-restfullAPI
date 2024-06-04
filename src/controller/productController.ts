@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ProductService } from '../service/productService';
-import {
-  CreateProductRequest,
-  CreateProductResponse,
-} from '../model/productModel';
+import { CreateProductRequest, ProductResponse } from '../model/productModel';
 
 export class ProductController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -17,7 +14,7 @@ export class ProductController {
 
       console.log(req.file);
 
-      const result: CreateProductResponse = await ProductService.create(
+      const result: ProductResponse = await ProductService.create(
         request,
         path
       );
@@ -28,20 +25,19 @@ export class ProductController {
       next(e);
     }
   }
+  static async get(req: Request, res: Response, next: NextFunction) {
+    try {
+      const productId: number = Number(req.params.productId);
+      const result = await ProductService.get(productId);
+
+      res.status(200).json({
+        message: 'success',
+        data: result,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
-
-// const get = async (req, res, next) => {
-//   try {
-//     const { productId } = req.params;
-//     const result = await productService.get(productId);
-
-//     res.status(200).json({
-//       message: 'success',
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 // export default { create, get };

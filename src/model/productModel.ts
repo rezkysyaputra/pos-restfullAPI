@@ -10,7 +10,22 @@ export type CreateProductRequest = {
   categoryId: number | null;
 };
 
-export type CreateProductResponse = {
+export type ProductResponse = {
+  id: number;
+  sku: string;
+  name: string;
+  price: number;
+  stock: number;
+  image: string | null;
+  category: {
+    id: number;
+    name: string;
+  } | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type GetProductResponse = {
   id: number;
   sku: string;
   name: string;
